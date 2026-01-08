@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>YouTube Study Guard Pro</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="popup-container">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-content">
+        <div class="logo">
+          <span class="logo-icon">📚</span>
+          <span class="logo-text">Study Guard Pro</span>
+        </div>
+        <label class="power-toggle">
+          <input type="checkbox" id="powerToggle" checked>
+          <span class="toggle-slider"></span>
+        </label>
+      </div>
+      <div class="status" id="statusText">
+        <span class="status-dot active"></span>
+        Active - Protecting your focus
+      </div>
+    </header>
+
+    <!-- Navigation Tabs -->
+    <nav class="tabs">
+      <button class="tab active" data-tab="dashboard">Dashboard</button>
+      <button class="tab" data-tab="settings">Settings</button>
+      <button class="tab" data-tab="lists">Lists</button>
+      <button class="tab" data-tab="log">Activity</button>
+    </nav>
+
+    <!-- Tab Contents -->
+    <main class="content">
+      <!-- Dashboard Tab -->
+      <section class="tab-content active" id="dashboard">
+        <div class="stats-grid">
+          <div class="stat-card blocked">
+            <div class="stat-icon">🚫</div>
+            <div class="stat-value" id="blockedCount">0</div>
+            <div class="stat-label">Blocked Today</div>
+          </div>
+          <div class="stat-card allowed">
+            <div class="stat-icon">✅</div>
+            <div class="stat-value" id="allowedCount">0</div>
+            <div class="stat-label">Allowed Today</div>
+          </div>
+        </div>
+        
+        <div class="mode-selector">
+          <h3>Protection Mode</h3>
+          <div class="mode-buttons">
+            <button class="mode-btn" data-mode="strict">
+              <span class="mode-icon">🔒</span>
+              <span class="mode-name">Strict</span>
+              <span class="mode-desc">Block anything questionable</span>
+            </button>
+            <button class="mode-btn" data-mode="normal">
+              <span class="mode-icon">⚖️</span>
+              <span class="mode-name">Normal</span>
+              <span class="mode-desc">Balanced filtering</span>
+            </button>
+            <button class="mode-btn" data-mode="lenient">
+              <span class="mode-icon">🔓</span>
+              <span class="mode-name">Lenient</span>
+              <span class="mode-desc">Only obvious entertainment</span>
+            </button>
+          </div>
+        </div>
+      </section>
+
+      <!-- Settings Tab -->
+      <section class="tab-content" id="settings">
+        <div class="settings-list">
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Block YouTube Shorts</span>
+              <span class="setting-desc">Highly addictive short-form videos</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="blockShorts" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Block Homepage</span>
+              <span class="setting-desc">Show warning on YouTube homepage</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="blockHomepage">
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Show Notifications</span>
+              <span class="setting-desc">Brief alert when blocking content</span>
+            </div>
+            <label class="switch">
+              <input type="checkbox" id="showNotifications" checked>
+              <span class="switch-slider"></span>
+            </label>
+          </div>
+          
+          <div class="setting-item">
+            <div class="setting-info">
+              <span class="setting-name">Notification Duration</span>
+              <span class="setting-desc">How long to show block alerts</span>
+            </div>
+            <div class="slider-container">
+              <input type="range" id="notificationDuration" min="1" max="5" value="2">
+              <span class="slider-value" id="durationValue">2s</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Lists Tab -->
+      <section class="tab-content" id="lists">
+        <div class="list-section">
+          <h3>Whitelist <span class="list-count" id="whitelistCount">0</span></h3>
+          <p class="list-desc">Channels/keywords that are always allowed</p>
+          <div class="list-input">
+            <input type="text" id="whitelistInput" placeholder="Add channel or keyword...">
+            <button class="add-btn" id="addWhitelist">+</button>
+          </div>
+          <ul class="list-items" id="whitelistItems"></ul>
+        </div>
+        
+        <div class="list-section">
+          <h3>Blocklist <span class="list-count" id="blocklistCount">0</span></h3>
+          <p class="list-desc">Keywords that are always blocked</p>
+          <div class="list-input">
+            <input type="text" id="blocklistInput" placeholder="Add keyword to block...">
+            <button class="add-btn" id="addBlocklist">+</button>
+          </div>
+          <ul class="list-items" id="blocklistItems"></ul>
+        </div>
+      </section>
+
+      <!-- Activity Log Tab -->
+      <section class="tab-content" id="log">
+        <div class="log-header">
+          <h3>Recent Activity</h3>
+          <button class="clear-btn" id="clearLog">Clear All</button>
+        </div>
+        <ul class="activity-list" id="activityList">
+          <li class="empty-state">No activity yet</li>
+        </ul>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <span>YouTube Study Guard Pro v1.0</span>
+    </footer>
+  </div>
+  
+  <script src="popup.js"></script>
+</body>
+</html>
