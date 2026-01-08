@@ -43,9 +43,3 @@ Turn **ON** the **Developer mode** toggle (top-right corner).
 Focus mode: **ON**
 
 ---
-
-## Notes
-- No sign-in required
-- Works fully offline
-- Uses local keyword-based intelligence
-- Built for students, developers, and exam prep
