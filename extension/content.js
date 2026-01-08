@@ -1,87 +1,69 @@
+// LockIn – Content Script
 
 (() => {
-  'use strict';
+  if (window.__lockInInjected) return;
+  window.__lockInInjected = true;
 
-  if (window.__ytStudyGuardInjected) return;
-  window.__ytStudyGuardInjected = true;
-
-  let lastTitle = '';
   let lastUrl = '';
-  let observerStarted = false;
+  let lastTitle = '';
 
-  function getVideoTitle() {
+  function getTitle() {
     const el =
       document.querySelector('h1.ytd-watch-metadata yt-formatted-string') ||
       document.querySelector('#title h1 yt-formatted-string');
 
-    if (el?.textContent?.trim()) {
-      return el.textContent.trim();
-    }
-
-    return document.title.replace(' - YouTube', '').trim();
+    return (
+      el?.textContent?.trim() ||
+      document.title.replace(' - YouTube', '').trim()
+    );
   }
 
-  function getChannel() {
-    return document.querySelector('#channel-name a')?.textContent?.trim() || '';
-  }
-
-  function sendVideoInfo() {
-    const title = getVideoTitle();
+  function sendVideo() {
+    const title = getTitle();
     const url = location.href;
 
-    if (!title) return;
-    if (title === lastTitle && url === lastUrl) return;
+    if (!title || (title === lastTitle && url === lastUrl)) return;
 
     lastTitle = title;
     lastUrl = url;
 
-    chrome.runtime.sendMessage({
-      type: 'VIDEO_DETECTED',
-      data: {
-        title,
-        channel: getChannel(),
-        url
-      }
-    }).catch(() => {});
+    try {
+      chrome.runtime.sendMessage({
+        type: 'VIDEO_DETECTED',
+        data: { title, url }
+      });
+    } catch {}
   }
 
-  function startObserverWhenReady() {
-    if (observerStarted) return;
-
-    if (!document.body) {
-      // Body not ready yet → retry shortly
-      setTimeout(startObserverWhenReady, 100);
-      return;
-    }
-
-    observerStarted = true;
+  function initObserver() {
+    if (!document.body) return;
 
     const observer = new MutationObserver(() => {
-      clearTimeout(window.__ytStudyGuardDebounce);
-      window.__ytStudyGuardDebounce = setTimeout(sendVideoInfo, 400);
+      clearTimeout(window.__lockInDebounce);
+      window.__lockInDebounce = setTimeout(sendVideo, 500);
     });
 
-    observer.observe(document.body, {
-      childList: true,
-      subtree: true
-    });
+    observer.observe(document.body, { childList: true, subtree: true });
   }
 
   // SPA navigation hooks
   ['pushState', 'replaceState'].forEach(fn => {
-    const orig = history[fn];
+    const original = history[fn];
     history[fn] = function () {
-      orig.apply(this, arguments);
-      setTimeout(sendVideoInfo, 600);
+      original.apply(this, arguments);
+      setTimeout(sendVideo, 800);
     };
   });
 
-  window.addEventListener('popstate', () => setTimeout(sendVideoInfo, 600));
-  window.addEventListener('yt-navigate-finish', () => setTimeout(sendVideoInfo, 600));
+  window.addEventListener('popstate', () => setTimeout(sendVideo, 800));
+  window.addEventListener('yt-navigate-finish', () => setTimeout(sendVideo, 800));
 
-  // Start observer safely
-  startObserverWhenReady();
+  // Init
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initObserver);
+  } else {
+    initObserver();
+  }
 
-  // Initial detection (after page settles)
-  setTimeout(sendVideoInfo, 1200);
+  setTimeout(sendVideo, 1200);
 })();

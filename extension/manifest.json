@@ -1,6 +1,6 @@
 {
   "manifest_version": 3,
-  "name": "YouTube Study Guard Pro",
+  "name": "LockIn – Study-Only YouTube Extension",
   "version": "1.0.0",
   "description": "Intelligent guardian for YouTube-based studying. Automatically blocks distracting videos while allowing educational content.",
   "permissions": [

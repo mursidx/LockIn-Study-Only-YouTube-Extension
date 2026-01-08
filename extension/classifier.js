@@ -1,45 +1,60 @@
-
-
 export class VideoClassifier {
-  classify(title) {
+  constructor() {
+    this.mode = 'normal';
+  }
+
+  setMode(mode) {
+    this.mode = ['strict', 'normal', 'lenient'].includes(mode)
+      ? mode
+      : 'normal';
+  }
+
+  classify(title, isShort = false) {
     const text = title.toLowerCase();
 
-    // 🔒 STRONG STUDY KEYWORDS
     const studyKeywords = [
-      // Exams
-      'exam','prelims','mains','mock','pyq','previous year',
-      'ssc','cgl','chsl','mts','upsc','ias','ips',
-      'bank','rbi','nabard','sebi','ibps','sbi',
-
-      // Learning signals
-      'lecture','class','course','tutorial','one shot',
-      'full course','crash course','revision','strategy',
-      'preparation','analysis','syllabus','notes','how to','end-to-end', 'end to end','stack','Project ', 'hackathon', 'Beginners',
-
-      // Tech / Coding
-      'programming','coding','graph', 'python','java','javascript',
-      'typescript','c++','php','sql','dsa','algorithm',
-      'data structure','react','node','backend','frontend',
-
-      // Academics
-      'math','maths','physics','chemistry','biology',
-      'science','economics','polity','geography','history',
-      'english','grammar','reasoning','aptitude'
+      'tutorial','course','lecture','exam','preparation',
+      'strategy','mock','revision','how to','guide',
+      'programming','coding','react','python','java',
+      'javascript','sql','dsa','leetcode','gate',
+      'ssc','bank','rbi','nabard','upsc'
     ];
 
-    for (const word of studyKeywords) {
-      if (text.includes(word)) {
-        return {
-          isEducational: true,
-          reason: 'Study keyword detected'
-        };
-      }
+    const skillKeywords = [
+      'podcast','interview','talk','live',
+      'design','editing','ai','machine learning',
+      'finance','startup','business','fitness',
+      'language learning','productivity'
+    ];
+
+    const entertainmentKeywords = [
+      'song','music','movie','trailer','reaction',
+      'vlog','prank','funny','meme','reels'
+    ];
+
+    if (isShort && this.mode !== 'lenient') {
+      return { isEducational: false };
     }
 
-    // ❌ EVERYTHING ELSE = DISTRACTION
-    return {
-      isEducational: false,
-      reason: 'Non-study content'
-    };
+    if (this.mode === 'strict') {
+      return {
+        isEducational: studyKeywords.some(k => text.includes(k))
+      };
+    }
+
+    if (this.mode === 'normal') {
+      return {
+        isEducational:
+          studyKeywords.some(k => text.includes(k)) ||
+          skillKeywords.some(k => text.includes(k))
+      };
+    }
+
+    // lenient
+    if (text.includes('reels') || text.includes('shorts')) {
+      return { isEducational: false };
+    }
+
+    return { isEducational: true };
   }
 }

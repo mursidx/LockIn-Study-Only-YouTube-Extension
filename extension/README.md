@@ -1,4 +1,4 @@
-# YouTube Study Guard Pro
+# LockIn – Study-Only YouTube Extension
 
 📚 **Intelligent guardian for YouTube-based studying**
 
