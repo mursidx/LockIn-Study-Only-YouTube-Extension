@@ -1,5 +1,3 @@
-// YouTube Study Guard Pro - Content Script
-// Purpose: Detect currently playing video and report to background
 
 (() => {
   'use strict';

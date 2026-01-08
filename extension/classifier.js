@@ -1,5 +1,4 @@
-// YouTube Study Guard Pro - Video Classifier
-// Rule: ONLY educational videos are allowed
+
 
 export class VideoClassifier {
   classify(title) {
@@ -15,7 +14,7 @@ export class VideoClassifier {
       // Learning signals
       'lecture','class','course','tutorial','one shot',
       'full course','crash course','revision','strategy',
-      'preparation','analysis','syllabus','notes','how to','end-to-end', 'end to end','stack',
+      'preparation','analysis','syllabus','notes','how to','end-to-end', 'end to end','stack','Project ', 'hackathon', 'Beginners',
 
       // Tech / Coding
       'programming','coding','graph', 'python','java','javascript',
