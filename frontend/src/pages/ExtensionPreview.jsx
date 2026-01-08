@@ -44,7 +44,7 @@ const ExtensionPreview = () => {
           <Link to="/" className="flex items-center gap-3">
             <span className="text-2xl">📚</span>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              LockIn – Study-Only YouTube Extension
+              Study Guard Pro
             </span>
           </Link>
           <Link to="/download" className="px-6 py-2 bg-gradient-to-r from-purple-500 to-pink-500 rounded-lg text-white font-semibold hover:opacity-90 transition">
@@ -64,7 +64,7 @@ const ExtensionPreview = () => {
                 <div className="flex items-center gap-2">
                   <span className="text-xl">📚</span>
                   <span className="font-bold bg-gradient-to-r from-[#667eea] to-[#764ba2] bg-clip-text text-transparent">
-                    LockIn – Study-Only YouTube Extension
+                    Study Guard Pro
                   </span>
                 </div>
                 <label className="relative inline-block w-12 h-6 cursor-pointer">
@@ -287,7 +287,7 @@ const ExtensionPreview = () => {
 
             {/* Footer */}
             <footer className="border-t border-[#2d2d3d] py-3 text-center text-xs text-gray-500 bg-[#1a1a24]">
-              LockIn - v1.0
+              YouTube Study Guard Pro v1.0
             </footer>
           </div>
         </div>
