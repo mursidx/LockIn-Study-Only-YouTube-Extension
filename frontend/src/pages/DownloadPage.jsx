@@ -18,7 +18,7 @@ const DownloadPage = () => {
           <Link to="/" className="flex items-center gap-3">
             <span className="text-2xl">📚</span>
             <span className="text-xl font-bold bg-gradient-to-r from-purple-400 to-pink-400 bg-clip-text text-transparent">
-              Study Guard Pro
+              LockIn – Study-Only YouTube Extension
             </span>
           </Link>
           <Link to="/preview" className="px-6 py-2 border border-white/20 rounded-lg text-white hover:bg-white/10 transition">
