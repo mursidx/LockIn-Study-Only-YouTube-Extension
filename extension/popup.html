@@ -1,11 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>LockIn – YouTube Extension</title>
   <link rel="stylesheet" href="styles.css">
 </head>
+
 <body>
   <div class="popup-container">
     <!-- Header -->
@@ -50,7 +52,7 @@
             <div class="stat-label">Allowed Today</div>
           </div>
         </div>
-        
+
         <div class="mode-selector">
           <h3>Protection Mode</h3>
           <div class="mode-buttons">
@@ -71,6 +73,26 @@
             </button>
           </div>
         </div>
+
+        <!-- Support Section -->
+        <div class="support-card">
+          <div class="support-text">
+            <span class="support-emoji">☕</span>
+
+            <p class="support-title">Loving LockIn?</p>
+
+            <p class="support-desc">
+              If this helps you stay focused, consider supporting me so I can build
+              more tools that actually help.
+            </p>
+          </div>
+
+          <a class="support-btn" href="https://buymeacoffee.com/mursidx" target="_blank" rel="noopener noreferrer">
+            Buy me a coffee
+          </a>
+        </div>
+
+
       </section>
 
       <!-- Settings Tab -->
@@ -86,7 +108,7 @@
               <span class="switch-slider"></span>
             </label>
           </div>
-          
+
           <div class="setting-item">
             <div class="setting-info">
               <span class="setting-name">Block Homepage</span>
@@ -97,7 +119,7 @@
               <span class="switch-slider"></span>
             </label>
           </div>
-          
+
           <div class="setting-item">
             <div class="setting-info">
               <span class="setting-name">Show Notifications</span>
@@ -108,7 +130,7 @@
               <span class="switch-slider"></span>
             </label>
           </div>
-          
+
           <div class="setting-item">
             <div class="setting-info">
               <span class="setting-name">Notification Duration</span>
@@ -133,7 +155,7 @@
           </div>
           <ul class="list-items" id="whitelistItems"></ul>
         </div>
-        
+
         <div class="list-section">
           <h3>Blocklist <span class="list-count" id="blocklistCount">0</span></h3>
           <p class="list-desc">Keywords that are always blocked</p>
@@ -162,7 +184,8 @@
       <span>LockIn – YouTube Extension v1.0</span>
     </footer>
   </div>
-  
+
   <script src="popup.js"></script>
 </body>
+
 </html>
