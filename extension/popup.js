@@ -37,8 +37,8 @@ document.addEventListener('DOMContentLoaded', async () => {
     updateStatus();
     
     // Stats
-    blockedCount.textContent = state.blockedToday || 0;
-    allowedCount.textContent = state.allowedToday || 0;
+    blockedCount.textContent = state.stats?.blockedToday ?? 0;
+    allowedCount.textContent = state.stats?.allowedToday ?? 0;
     
     // Mode
     modeButtons.forEach(btn => {
@@ -245,12 +245,14 @@ document.addEventListener('DOMContentLoaded', async () => {
   }
 
   // Refresh state periodically
-  setInterval(async () => {
-    state = await chrome.runtime.sendMessage({ type: 'GET_STATE' });
-    blockedCount.textContent = state.blockedToday || 0;
-    allowedCount.textContent = state.allowedToday || 0;
-    renderActivityLog();
-  }, 5000);
+setInterval(async () => {
+  state = await chrome.runtime.sendMessage({ type: 'GET_STATE' });
+
+  blockedCount.textContent = state.stats?.blockedToday ?? 0;
+  allowedCount.textContent = state.stats?.allowedToday ?? 0;
+
+  renderActivityLog();
+}, 5000);
 
   // Initialize
   initUI();
