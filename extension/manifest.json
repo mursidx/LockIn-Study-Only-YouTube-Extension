@@ -2,35 +2,34 @@
   "manifest_version": 3,
   "name": "LockIn – Study-Only YouTube Extension",
   "version": "1.0.0",
-  "description": "Intelligent guardian for YouTube-based studying. Automatically blocks distracting videos while allowing educational content.",
+  "description": "Blocks distracting YouTube content and allows only study-related videos to help users stay focused.",
+  
   "permissions": [
     "tabs",
-    "scripting",
-    "activeTab",
-    "storage",
-    "alarms"
+    "storage"
   ],
+
   "host_permissions": [
-    "*://www.youtube.com/*",
-    "*://m.youtube.com/*",
-    "*://youtube.com/*"
+    "https://www.youtube.com/*",
+    "https://m.youtube.com/*"
   ],
+
   "background": {
     "service_worker": "background.js",
     "type": "module"
   },
+
   "content_scripts": [
     {
       "matches": [
-        "*://www.youtube.com/*",
-        "*://m.youtube.com/*",
-        "*://youtube.com/*"
+        "https://www.youtube.com/*",
+        "https://m.youtube.com/*"
       ],
       "js": ["content.js"],
-      "run_at": "document_start",
-      "all_frames": true
+      "run_at": "document_start"
     }
   ],
+
   "action": {
     "default_popup": "popup.html",
     "default_icon": {
@@ -40,6 +39,7 @@
       "128": "icons/icon128.png"
     }
   },
+
   "icons": {
     "16": "icons/icon16.png",
     "32": "icons/icon32.png",
