@@ -67,13 +67,23 @@ function logActivity(type, title) {
 
 async function blockTab(tabId) {
   try {
-    await chrome.tabs.update(tabId, { url: 'chrome://newtab' });
-  } catch {
+    // First try: redirect the same tab to YouTube homepage
+    await chrome.tabs.update(tabId, {
+      url: 'https://www.youtube.com/'
+    });
+  } catch (err) {
     try {
-      await chrome.tabs.remove(tabId);
-    } catch {}
+      // Fallback: if tab is gone or update fails, open a fresh YouTube tab
+      await chrome.tabs.create({
+        url: 'https://www.youtube.com/',
+        active: true
+      });
+    } catch {
+      // Absolute last resort: do nothing (avoid crashes)
+    }
   }
 }
+
 
 /* =========================
    CORE LOGIC

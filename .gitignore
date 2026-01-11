@@ -38,3 +38,5 @@ Thumbs.db
 *token.json*
 *credentials.json*
 *.pem
+lockin-extension
+.gitignore
