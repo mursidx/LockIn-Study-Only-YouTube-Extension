@@ -1,7 +1,7 @@
 // LockIn – Study-Only YouTube Extension
 // Background Service Worker (Manifest V3)
 
-import { VideoClassifier } from './classifier.js';
+import { VideoClassifier } from "./classifier.js";
 
 const classifier = new VideoClassifier();
 
@@ -10,16 +10,16 @@ const classifier = new VideoClassifier();
 ========================= */
 let state = {
   isEnabled: true,
-  mode: 'strict',
+  mode: "strict",
   blockShorts: true,
   whitelist: [],
   blocklist: [],
   stats: {
     blockedToday: 0,
     allowedToday: 0,
-    lastReset: new Date().toDateString()
+    lastReset: new Date().toDateString(),
   },
-  activityLog: []
+  activityLog: [],
 };
 
 /* =========================
@@ -40,11 +40,11 @@ async function persistState() {
    HELPERS
 ========================= */
 function isShorts(url) {
-  return typeof url === 'string' && url.includes('/shorts/');
+  return typeof url === "string" && url.includes("/shorts/");
 }
 
 function isWatchPage(url) {
-  return typeof url === 'string' && url.includes('youtube.com/watch');
+  return typeof url === "string" && url.includes("youtube.com/watch");
 }
 
 function resetStatsIfNeeded() {
@@ -60,96 +60,69 @@ function logActivity(type, title) {
   state.activityLog.unshift({
     type,
     title,
-    timestamp: Date.now()
+    timestamp: Date.now(),
   });
   state.activityLog = state.activityLog.slice(0, 50);
 }
-
-async function blockTab(tabId) {
-  try {
-    // First try: redirect the same tab to YouTube homepage
-    await chrome.tabs.update(tabId, {
-      url: 'https://www.youtube.com/'
-    });
-  } catch (err) {
-    try {
-      // Fallback: if tab is gone or update fails, open a fresh YouTube tab
-      await chrome.tabs.create({
-        url: 'https://www.youtube.com/',
-        active: true
-      });
-    } catch {
-      // Absolute last resort: do nothing (avoid crashes)
-    }
-  }
-}
-
 
 /* =========================
    CORE LOGIC
 ========================= */
 async function handleVideo(tabId, { title, url }) {
-  if (!state.isEnabled || !title || !url) return;
+  if (!state.isEnabled || !title || !url) {
+    return { block: false };
+  }
 
   resetStatsIfNeeded();
 
   const lowerTitle = title.toLowerCase();
   const short = isShorts(url);
 
-  /* =========================
-     🚫 SHORTS — CHECK FIRST
-     ========================= */
-  if (short && state.blockShorts && state.mode !== 'lenient') {
+  // 🚫 Shorts
+  if (short && state.blockShorts && state.mode !== "lenient") {
     state.stats.blockedToday++;
-    logActivity('blocked', title);
+    logActivity("blocked", title);
     await persistState();
-    await blockTab(tabId);
-    return;
+    return { block: true };
   }
 
-  /* =========================
-     ❗ IGNORE NON-VIDEO PAGES
-     ========================= */
-  if (!isWatchPage(url) && !short) return;
+  // ❗ Ignore non-watch pages
+  if (!isWatchPage(url) && !short) {
+    return { block: false };
+  }
 
-  /* =========================
-     ✅ WHITELIST
-     ========================= */
-  if (state.whitelist.some(w => lowerTitle.includes(w))) {
+  // ✅ Whitelist
+  if (state.whitelist.some((w) => lowerTitle.includes(w))) {
     state.stats.allowedToday++;
-    logActivity('allowed', title);
+    logActivity("allowed", title);
     await persistState();
-    return;
+    return { block: false };
   }
 
-  /* =========================
-     🚫 BLOCKLIST
-     ========================= */
-  if (state.blocklist.some(b => lowerTitle.includes(b))) {
+  // 🚫 Blocklist
+  if (state.blocklist.some((b) => lowerTitle.includes(b))) {
     state.stats.blockedToday++;
-    logActivity('blocked', title);
+    logActivity("blocked", title);
     await persistState();
-    await blockTab(tabId);
-    return;
+    return { block: true };
   }
 
-  /* =========================
-     🧠 CLASSIFIER
-     ========================= */
+  // 🧠 Classifier
   const result = classifier.classify(title, short);
 
-  if (result.isEducational) {
-    state.stats.allowedToday++;
-    logActivity('allowed', title);
-  } else {
+  if (!result.isEducational) {
     state.stats.blockedToday++;
-    logActivity('blocked', title);
-    await blockTab(tabId);
+    logActivity("blocked", title);
+    await persistState();
+    return { block: true };
   }
 
+  // ✅ Educational
+  state.stats.allowedToday++;
+  logActivity("allowed", title);
   await persistState();
+  return { block: false };
 }
-
 
 /* =========================
    MESSAGES
@@ -158,22 +131,22 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
   if (!msg) return;
 
   switch (msg.type) {
-    case 'VIDEO_DETECTED':
-      if (sender.tab?.id) handleVideo(sender.tab.id, msg.data);
-      break;
+    case "VIDEO_DETECTED":
+      handleVideo(sender.tab?.id, msg.data).then(sendResponse);
+      return true;
 
-    case 'GET_STATE':
+    case "GET_STATE":
       sendResponse(state);
       break;
 
-    case 'UPDATE_STATE':
+    case "UPDATE_STATE":
       state = { ...state, ...msg.data };
       classifier.setMode(state.mode);
       persistState();
       sendResponse({ success: true });
       break;
 
-    case 'ADD_WHITELIST': {
+    case "ADD_WHITELIST": {
       const item = msg.item.toLowerCase();
       if (!state.whitelist.includes(item)) state.whitelist.push(item);
       persistState();
@@ -181,15 +154,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       break;
     }
 
-    case 'REMOVE_WHITELIST': {
+    case "REMOVE_WHITELIST": {
       const item = msg.item.toLowerCase();
-      state.whitelist = state.whitelist.filter(i => i !== item);
+      state.whitelist = state.whitelist.filter((i) => i !== item);
       persistState();
       sendResponse({ success: true });
       break;
     }
 
-    case 'ADD_BLOCKLIST': {
+    case "ADD_BLOCKLIST": {
       const item = msg.item.toLowerCase();
       if (!state.blocklist.includes(item)) state.blocklist.push(item);
       persistState();
@@ -197,15 +170,15 @@ chrome.runtime.onMessage.addListener((msg, sender, sendResponse) => {
       break;
     }
 
-    case 'REMOVE_BLOCKLIST': {
+    case "REMOVE_BLOCKLIST": {
       const item = msg.item.toLowerCase();
-      state.blocklist = state.blocklist.filter(i => i !== item);
+      state.blocklist = state.blocklist.filter((i) => i !== item);
       persistState();
       sendResponse({ success: true });
       break;
     }
 
-    case 'CLEAR_LOG':
+    case "CLEAR_LOG":
       state.activityLog = [];
       persistState();
       sendResponse({ success: true });

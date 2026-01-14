@@ -1,11 +1,10 @@
 {
   "manifest_version": 3,
   "name": "LockIn – Study-Only YouTube Extension",
-  "version": "1.0.0",
-  "description": "Blocks distracting YouTube content and allows only study-related videos to help users stay focused.",
+  "version": "1.0.2",
+  "description": "Blocks distracting YouTube content and allows only study-related videos to help you stay focused.",
   
   "permissions": [
-    "tabs",
     "storage"
   ],
 
