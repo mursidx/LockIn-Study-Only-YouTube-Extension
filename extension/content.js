@@ -63,7 +63,10 @@
       },
       (response) => {
         if (response?.block === true) {
-          if (location.pathname.startsWith("/watch")) {
+          if (
+            location.pathname.startsWith("/watch") ||
+            location.pathname.startsWith("/shorts")
+          ) {
             window.location.replace("https://www.youtube.com/");
           }
         }
